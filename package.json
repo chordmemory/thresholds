@@ -1,24 +1,45 @@
 {
-  "name": "riker",
+  "name": "threshold",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch:webpack:samples:chat:app": "webpack-dev-server --config packages/samples/chat/app/webpack.config.js",
+    "watch:webpack:samples:chat:server": "webpack --config packages/samples/chat/server/webpack.config.js --watch",
+    "start:node:samples:server": "node --inspect packages/samples/chat/server/dist/chat-server.js",
+    "watch": "concurrently \"npm:watch:*\"",
+    "build": "concurrently \"npm:buid:*\"",
+    "start": "concurrently \"npm:start:*\""
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/express": "^4.17.3",
+    "@types/body-parser": "^1.19.0",
+    "@types/express": "types/express",
+    "@types/react": "^16.9.43",
+    "@types/react-dom": "^16.9.8",
+    "@types/reflect-metadata": "^0.1.0",
+    "@types/uuid-js": "^0.7.2",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
-    "typescript": "^3.8.3"
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "reflect-metadata": "^0.1.13",
+    "typescript": "^3.8.3",
+    "uuid": "^8.3.0",
+    "uuid-js": "^0.7.5"
   },
   "devDependencies": {
-    "html-webpack-plugin": "^3.2.0",
-    "ts-loader": "^6.2.2",
+    "concurrently": "^5.2.0",
+    "html-webpack-plugin": "^4.3.0",
+    "npm": "^6.14.7",
+    "ts-loader": "^8.0.1",
     "webpack": "^4.42.0",
     "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.10.3",
-    "webpack-html-plugin": "^0.1.1"
+    "webpack-dev-server": "^3.11.0",
+    "webpack-html-plugin": "^0.1.1",
+    "webpack-node-externals": "^2.5.0"
   }
 }

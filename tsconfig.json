@@ -3,15 +3,21 @@
     "target": "ES2015",
     "experimentalDecorators": true,
     "moduleResolution": "node",
+    "module": "CommonJS",
+    "jsx": "react",
+    "allowSyntheticDefaultImports": true,
     "paths": {
-      "@riker-types/*": [
+      "@threshold-types/*": [
         "./packages/types/*"
       ],
-      "@riker-libs/*": [
+      "@threshold-libs/*": [
         "./packages/libs/*"
       ],
-      "@riker-apps/*": [
+      "@threshold-apps/*": [
         "./packages/apps/*"
+      ],
+      "@threshold-transports/*": [
+        "./packages/transports/*"
       ]
     },
     "baseUrl": "./"
