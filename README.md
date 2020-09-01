@@ -1,13 +1,13 @@
 # Threshold.js
 A platform & protocol independent proposal for RPC based service publishing, based on decorators.
 
-# What?
+## What?
 
 A threshold is some class or object that has been exposed over some transport to make it callable via a remote client. 
 
 A consumer can 'discover' a threshold, and automatically generate a dynamic client using the discovery API. No need to generate code, or manually implement a client.
 
-# Show Me
+## Show Me
 
 Imagine a very simple http service that allows consumers to post and read notes.
 
@@ -84,17 +84,17 @@ await chatApi.addNote('hello world');
 await chatApi.getNotes() // returns all notes posted, including 'hello world'
 ```
 
-# Why Tho?
+## Why Tho?
 
 * Development speed - you can standup new services and start writing against them at a rapid pace.
 * Code Reduction - removing boilerplate servers and clients reduces the amount of code you need to write, test and remember.
 * Best practices - transports implementations will (eventually) represent the best patterns for their specific use case
 * Cross platform (eventually) 
 
-# Disclaimer
+## Disclaimer
 This is all still very much in the 'experimental' stage. None of the apis are even close to being concrete, this repo is overdue a conversion to a monorepo, and the build is completley immature.
 
-# Roadmap 
+## Roadmap 
 
 Rough looking trello board here: https://trello.com/b/aXc3NZJz/thresholds
 
