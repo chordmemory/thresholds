@@ -1,4 +1,4 @@
-# Threshold.js
+# Thresholds-js
 A platform & protocol independent proposal for RPC based service publishing, based on decorators.
 
 ## What?
