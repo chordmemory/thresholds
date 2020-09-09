@@ -1,0 +1,21 @@
+{
+  "name": "@thresholds-consumers/http",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/js/index.js",
+  "types": "dist/types/index.d.ts",
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "tsc",
+    "start": "tsc --watch"
+  },
+  "author": "David Coxon",
+  "license": "ISC",
+  "dependencies": {
+    "@threshold-types/core": "0.0.1"
+  },
+  "devDependencies": {
+    "rimraf": "3.0.2",
+    "typescript": "4.0.2"
+  }
+}

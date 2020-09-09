@@ -1,0 +1,32 @@
+{
+  "name": "@thresholds-samples/chat-server",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/js/index.js",
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "tsc",
+    "start": "concurrently \"tsc --watch\" \"nodemon dist/js/main.js\""
+  },
+  "author": "David Coxon  ",
+  "license": "ISC",
+  "dependencies": {
+    "@thresholds-transports/http": "0.0.1",
+    "@thresholds/core": "0.0.1",
+    "@types/body-parser": "^1.19.0",
+    "@types/express": "types/express",
+    "@types/node": "12.12.2",
+    "@types/uuid": "3.4.3",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "laconic-js": "0.0.1",
+    "reflect-metadata": "^0.1.13",
+    "uuid": "^8.3.0"
+  },
+  "devDependencies": {
+    "concurrently": "5.3.0",
+    "nodemon": "2.0.4",
+    "typescript": "^4.0.1"
+  }
+}

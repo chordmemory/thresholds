@@ -1,0 +1,14 @@
+{
+  "name": "@threshold-types/core",
+  "version": "0.0.1",
+  "description": "",
+  "types": "types/index.d.ts",
+  "author": "David Coxon",
+  "license": "ISC",
+  "dependencies": {
+    "typescript": "4.0.2"
+  },
+  "files": [
+    "types"
+  ]
+}
