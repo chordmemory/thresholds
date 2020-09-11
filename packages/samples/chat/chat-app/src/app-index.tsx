@@ -1,14 +1,17 @@
 import * as React from 'react';
 import { render } from 'react-dom';
-import { HttpThreshold } from '@thresholds-consumers/http';
-import { discoverThreshold } from '@thresholds/core';
+import { HttpConsumer, HttpManifestConfig } from '@thresholds/http-consumer';
+import * as thresholds from '@thresholds/core';
 import { ChatDemo } from './chat-demo';
 import { ChatApi } from './chat-api';
+import { consume } from '@thresholds/core';
+
+thresholds.useConsumer('http', new HttpConsumer());
 
 (async () => {
-    const chatApi = await discoverThreshold<ChatApi>(new HttpThreshold({
-        manifestUrl: 'http://localhost:9080/manifest'
-    }));
+    const chatApi = await consume<ChatApi, HttpManifestConfig>('http', { 
+        url: 'http://localhost:9080/manifest'
+    });
 
     render((
         <ChatDemo

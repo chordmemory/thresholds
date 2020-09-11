@@ -1,31 +1,32 @@
 
-import { ThresholdClientTransport, ThresholdClientConfig } from '@threshold-types/core';
+import { Consumer, PropertyDefinition } from '@threshold-types/core';
 
-export interface HttpClientThresholdOptions {
-    protocol: string;
-    domain: string;
-    route: string;
+export interface HttpPropertyConfig {
+    url: string;
     method: string;
     headers?: HeadersInit
 }
 
-const tokenizeRoute = (route: string, args: any[]) => {
-    const tokens = route.match(/:(\d|\w*)/gm);
+export interface HttpManifestConfig {
+    url: string;
+}
+
+const tokenizeRoute = (uri: string, args: any[]) => {
+    const url = new URL(uri);
+    const tokens = url.pathname.match(/:(\d|\w*)/gm);
     (tokens || []).forEach((token, index) => {
-        route = route.replace(token, args[index]);
+        url.pathname = url.pathname.replace(token, args[index]);
         args.splice(index, 1);
     });
-    return route;
+    return url.toString();
 };
 
-export class HttpThreshold implements ThresholdClientTransport<HttpClientThresholdOptions>{
-    constructor(private options: {
-        manifestUrl: string
-    }){}
+export class HttpConsumer implements Consumer<HttpManifestConfig, HttpPropertyConfig>{
+    constructor(){}
 
-    public async getManifest() {
+    public async getManifest(config: HttpManifestConfig) {
         const response = await fetch(
-            this.options.manifestUrl,
+            config.url,
             {
                 method: 'get',
                 headers: {
@@ -37,12 +38,12 @@ export class HttpThreshold implements ThresholdClientTransport<HttpClientThresho
     }
 
 
-    public async getThreshold(thresholdConfig: ThresholdClientConfig<HttpClientThresholdOptions>) {
+    public async createFunction(config: PropertyDefinition<HttpPropertyConfig>) {
         return async (...args: any[]) => {
-            const { domain, protocol, route, method, headers } = thresholdConfig.options;
+            const { url, method, headers } = config.options;
             if (method.toLowerCase() === 'get') {
                 const response = await fetch(
-                    `${protocol}://${domain}${tokenizeRoute(route, args)}?rest=${JSON.stringify(args)}`,
+                    `${tokenizeRoute(url, args)}?rest=${JSON.stringify(args)}`,
                     {
                         method: 'GET',
                         headers: {
@@ -54,7 +55,7 @@ export class HttpThreshold implements ThresholdClientTransport<HttpClientThresho
                 return await response.json();
             } else {
                 const response = await fetch(
-                    `${protocol}://${domain}${tokenizeRoute(route, args)}`,
+                    `${tokenizeRoute(url, args)}`,
                     {
                         method: 'POST',
                         headers: {

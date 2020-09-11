@@ -11,8 +11,8 @@
   "author": "David Coxon  ",
   "license": "ISC",
   "dependencies": {
-    "@thresholds-consumers/http": "0.0.1",
     "@thresholds/core": "0.0.1",
+    "@thresholds/http-consumer": "0.0.1",
     "@types/react": "^16.9.43",
     "@types/react-dom": "^16.9.8",
     "react": "^16.13.1",

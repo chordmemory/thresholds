@@ -1,31 +1,18 @@
 import { Event } from 'laconic-js';
-import { thresholdFn, thresholdManifest } from '@thresholds/core';
-import { HttpServerOptions } from '@thresholds-transports/http';
+import { expose, threshold } from '@thresholds/core';
 import { v4 as uuidv4 } from 'uuid';
 import { ChatDb } from './mock-dal';
-import { params } from 'express/lib/request';
 import { Chat, ChatManifest, Message } from './types';
+import { HttpExposeOptions } from '../../../../exposers/http/dist/types';
 
-@thresholdManifest({
-    transport: 'http',
-    options: {
-        route: '/manifest',
-        method: 'GET'
-    }
-})
+@threshold('http', { route: '/manifest', method: 'get' })
 export class ChatServer {
     private chatSubscriptions: { [chatId:string]: Event<[Message[]]> } = {}
 
     constructor(private dal: ChatDb) {
     }
 
-    @thresholdFn({
-        transport: 'http',
-        options: {
-            route: '/chats',
-            method: 'GET'
-        }
-    })
+    @expose<HttpExposeOptions>('http', { route: '/chats', method: 'GET' })
     public getChats() { 
         return Object.values(this.dal.chats).map(chat => ({
             chatId: chat.chatId,
@@ -34,13 +21,7 @@ export class ChatServer {
         }));
     }
 
-    @thresholdFn({
-        transport: 'http',
-        options:{
-            route: '/chat',
-            method: 'POST'
-        }
-    })
+    @expose<HttpExposeOptions>('http', { route: '/chat', method: 'POST' })
     public createChat(chat: Pick<Chat,'displayName' | 'userIds'>): ChatManifest {
         const { displayName, userIds } = chat;
         const chatId = uuidv4();
@@ -59,17 +40,17 @@ export class ChatServer {
         }
     }
 
-    @thresholdFn({
-        transport: 'http',
-        options: {
+    @expose<HttpExposeOptions>(
+        'http',
+        {
             route: '/chat/:chatId/messages',
             method: 'POST',
-            paramMapper: (params: { chatId: string }, body: any[]) => [
+            paramMapper: (params: { chatId: string }, body?: any[]) => [
                 params.chatId,
-                ...body
+                ...body || []
             ]
         }
-    })
+    )
     public addMessage(chatId: string, message: Pick<Message, 'userId' | 'body'>) {
         const { body, userId } = message;
         const messageId = uuidv4();
@@ -83,14 +64,14 @@ export class ChatServer {
         this.dal.chats[chatId].messageIds.push(newMessage.messageId);
     }
 
-    @thresholdFn<HttpServerOptions>({
-        transport: 'http',
-        options: {
+    @expose<HttpExposeOptions>(
+        'http',
+        {
             route: '/chats/:chatId/join',
             method: 'POST',
             paramMapper: ((params: { chatId: string }, body?: any[]) => [ params.chatId, ...body || [] ])
         }
-    })
+    )
     public joinChat(chatId: string, userId: string): ChatManifest {
         const targetChat = this.dal.chats[chatId];
         if (!this.dal.users[userId]) {

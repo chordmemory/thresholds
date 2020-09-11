@@ -13,6 +13,6 @@
   "scripts": {
     "prebuild": "yarn workspaces foreach run prebuild",
     "start": "yarn workspaces foreach -p -i -v -j 20 run start",
-    "build": "yarn workspaces foreach -pt run build"
+    "build": "yarn workspaces foreach -pt -i -v run build"
   }
 }

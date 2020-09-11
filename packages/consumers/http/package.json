@@ -1,5 +1,5 @@
 {
-  "name": "@thresholds-consumers/http",
+  "name": "@thresholds/http-consumer",
   "version": "0.0.1",
   "description": "",
   "main": "dist/js/index.js",

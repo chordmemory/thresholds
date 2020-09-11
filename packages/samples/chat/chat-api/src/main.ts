@@ -1,8 +1,18 @@
 import { ChatServer } from "./ChatServer"
-import { startService } from "@thresholds/core";
-import { HttpTransportServer } from "@thresholds-transports/http";
+import * as thresholds from "@thresholds/core";
+import { HttpExposer } from "@thresholds/http-exposer";
 import { ChatDb } from "./mock-dal";
+import express from 'express';
+import cors from 'cors';
 
-startService(new ChatServer(new ChatDb()) as any, {
-    http: new HttpTransportServer(9080)
-});
+const app = express();
+app.use(cors())
+thresholds.useExposer('http', new HttpExposer(9080, app as any));
+
+(async () => {
+    try {
+        await thresholds.exposeInstance(new ChatServer(new ChatDb()));
+    } catch(error) {
+        console.error('Failed to expose instance', error);
+    }
+})();

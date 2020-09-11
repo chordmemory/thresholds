@@ -1,3 +1,3 @@
-export * from './client';
-export * from './server';
-export * from './server-decorators'
+export * from './consume';
+export * from './expose';
+export * from './decorators'

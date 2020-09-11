@@ -1,11 +1,12 @@
-# Thresholds-js
-A platform & protocol independent proposal for RPC based service publishing, based on decorators.
+# Thresholds
+
+A platform & protocol independent library for making remote procedure calls behave like normal code, based on decorators.
 
 ## What?
 
-A threshold is some class or object that has been exposed over some transport to make it callable via a remote client. 
+A threshold is some class or object that has been exposed via an arbitrary protocol. 
 
-A consumer can 'discover' a threshold, and automatically generate a dynamic client using the discovery API. No need to generate code, or manually implement a client.
+A client can 'consume' a threshold, and automatically generate a client using the consumer API. No need to generate code, or manually implement a client. It just works.
 
 ## Show Me
 
@@ -16,36 +17,20 @@ Normally, you would either manually write or generate explicit code to do so.
 However, to speed things up a bit, we can use our fancy decorators to take care of the boring stuff.
 
 ```js
-@manifest({
-    transport: 'http',
-    options: {
-        route: '/manifest',
-        method: 'get'
-    }
-});
+import { threshold, expose } from '@thresholds/core'
+
+@threshold('http', { route: '/manifest', method: 'get' })
 class NoteService {
     constructor() {
         this.notes = [];
     }
 
-    @function({
-        transport: 'http',
-        options: {
-            route: '/notes',
-            method: 'post'
-        }
-    })
+    @expose('http', { route: '/notes', method: 'post' })
     addNote(note) {
         this.notes.push
     }
 
-    @function({
-        transport: 'http',
-        options: {
-            route: '/notes',
-            method: 'get'
-        }
-    })
+    @expose('http', { route: '/notes', method: 'get' })
     getNotes() {
         return this.notes;
     }
@@ -55,25 +40,23 @@ class NoteService {
 We can then start the service up with a simple call:
 
 ```js
-await createThreshold(new ChatServer(new NoteService()), {
-    transports: {
-        http: new HttpTransportServer(9080)
-    }
-});
-```
-And that's it, we now have a running http server. This is already pretty handy, but gets even more interesting in the client:
+const thresholds = require('@thresholds/core');
+const HttpExposer = require('@thresholds/http-exposer');
 
-```js
-const chatApi = await discoverThreshold<ChatApi>({
-    transports: {
-        http: new HttpTransport()
-    },
-    manifest: {
-        transport: 'http',
-        options: {
-            manifestUrl: 'http://localhost:9090/manifest'
-        }
-    }
+thresholds.useExposer('http', new HttpExposer(9080));
+
+await thresholds.exposeInstance(new ChatServer(new NoteService()));
+```
+And that's it, we are now exposing our chatserver over http. This is already pretty handy, but gets even more interesting in the client:
+
+```ts
+import * as thresholds from '@thresholds/core';
+import { HttpConsumer } from '@thresholds/http-consumer';
+
+thresholds.useConsumer('http', new HttpConsumer());
+
+const chatApi = await thresholds.consume<ChatApi>('http', {
+    manifestUrl: 'http://localhost:9090/manifest'
 });
 ```
 
@@ -92,7 +75,7 @@ await chatApi.getNotes() // returns all notes posted, including 'hello world'
 * Cross platform (eventually) 
 
 ## Disclaimer
-This is all still very much in the 'experimental' stage. None of the apis are even close to being concrete, this repo is overdue a conversion to a monorepo, and the build is completley immature.
+This is all still very much in the 'experimental' stage. None of the apis are even close to being concrete.
 
 ## Roadmap 
 

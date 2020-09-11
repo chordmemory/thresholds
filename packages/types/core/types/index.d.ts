@@ -1,33 +1,31 @@
 
-export interface ThresholdClientConfig<T> {
+export interface PropertyDefinition<T> {
   name: string;
   transport: string;
   options: T;
 }
 
-export interface ServiceClientManifest {
-  thresholds: ThresholdClientConfig<unknown>[]
+export interface ConsumerManifest<T> {
+  properties: PropertyDefinition<T>[]
 }
 
-type ThresholdFunction = (...args: any) => Promise<any> | any;
-
-export interface ThresholdClientTransport<T> {
-  getManifest(): ServiceClientManifest | Promise<ServiceClientManifest>;
-  getThreshold(config: ThresholdClientConfig<T>): ThresholdFunction | Promise<ThresholdFunction>;
+export interface Consumer<tManifestOptions, tFuncOptions> {
+  getManifest(config: tManifestOptions): ConsumerManifest<tFuncOptions> | Promise<ConsumerManifest<tFuncOptions>>;
+  createFunction(config: PropertyDefinition<tFuncOptions>): Function | Promise<Function>;
 }
 
-export interface ServerThresholdConfig<T> {
+export interface ExposedProperty<T> {
   transport: string;
   name: string;
   options: T;
   implementation: Function;
 }
 
-export interface ServerTransport<T> {
-  startThreshold(threshold: ServerThresholdConfig<T>): Promise<ThresholdClientConfig<unknown>>;
+export interface Exposer<T> {
+  exposeProperty(threshold: ExposedProperty<T>): Promise<PropertyDefinition<unknown>>;
 }
 
 export interface ThresholdServiceServerConfig {
-  manifest: Omit<ServerThresholdConfig<unknown>, 'implementation'>;
-  thresholds: ServerThresholdConfig<unknown>[];
+  manifest: Omit<ExposedProperty<unknown>, 'implementation'>;
+  thresholds: ExposedProperty<unknown>[];
 }

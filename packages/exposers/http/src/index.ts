@@ -1,19 +1,15 @@
-import { ServerTransport, ServerThresholdConfig, ThresholdClientConfig } from "@threshold-types/core";
+import { Exposer, ExposedProperty, PropertyDefinition } from "@threshold-types/core";
 import express from 'express';
-import * as bodyParser from 'body-parser';
 
-interface HttpClientThresholdOptions {
-  protocol: string;
-  domain: string;
-  route: string;
-  method: string;
-  headers?: HeadersInit
+export interface HttpConsumeConfig {
+    url: string;
+    method: string;
+    headers?: HeadersInit
 }
 
-export interface HttpServerOptions {
+export interface HttpExposeOptions {
     route: string;
     method: string;
-    port?: number;
     paramMapper?: (params: any, body?: unknown[]) => any[];
 }
 
@@ -25,18 +21,20 @@ const defaultParamMapper = (params: { [param: string]: unknown; rest?: unknown[]
     return [ namedParams, ...(params.rest || []) ];
 };
 
-export class HttpTransportServer implements ServerTransport<HttpServerOptions> {
-    constructor(private port: number){
+
+export class HttpExposer implements Exposer<HttpExposeOptions> {
+    constructor(private port: number, server?: express.Application){
         this.server = new Promise(resolve => {
-            const app = express();
-            app.use(bodyParser.json());
+            const app = server || express();
+            app.use(express.json());
             app.listen(port, () => resolve(app))
         });
     };
-    private server: Promise<express.Express>
+    private server: Promise<express.Application>
 
-    public async startThreshold(config: ServerThresholdConfig<HttpServerOptions>): Promise<ThresholdClientConfig<HttpClientThresholdOptions>> {
+    public async exposeProperty(config: ExposedProperty<HttpExposeOptions>): Promise<PropertyDefinition<HttpConsumeConfig>> {
         const app = await this.server;
+
         const { route, method, paramMapper } = config.options;
         const { name } = config;
 
@@ -71,15 +69,13 @@ export class HttpTransportServer implements ServerTransport<HttpServerOptions> {
         
         console.log('Create threshold', config);
         methodHandlers[config.options.method.toLowerCase() as 'get' |'post']();
-
+        console.log(`http://localhost:${this.port}${route}`)
         return {
             name: config.name,
             transport: config.transport,
             options: {
-                protocol: 'http',
-                method: config.options.method,
-                domain: `localhost:${this.port}`,
-                route
+                url: `http://localhost:${this.port}${route}`,
+                method: config.options.method
             }
         }
     }
