@@ -14,12 +14,8 @@
     "declarationDir": "dist/types",
     "outDir": "dist/js",
     "resolveJsonModule": true,
-    "types": [
-      "express"
-    ]
+    "types": ["express"]
   },
-  "include": [
-    "./src"
-  ],
+  "include": ["./src"],
   "compileOnSave": false
 }

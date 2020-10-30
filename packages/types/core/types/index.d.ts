@@ -6,7 +6,7 @@ export interface PropertyDefinition<T> {
 }
 
 export interface ConsumerManifest<T> {
-  properties: PropertyDefinition<T>[]
+  properties: PropertyDefinition<T>[];
 }
 
 export interface Consumer<tManifestOptions, tFuncOptions> {

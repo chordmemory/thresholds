@@ -1,3 +1,3 @@
-export default class WebSocket {
-    constructor(...args: any[]){}
-}
+// export default class WebSocket {
+//     constructor(...args: any[]){}
+// }

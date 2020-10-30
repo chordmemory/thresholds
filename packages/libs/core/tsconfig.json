@@ -15,8 +15,6 @@
     "resolveJsonModule": true,
     "plugins": []
   },
-  "include": [
-    "./src"
-  ],
+  "include": ["./src"],
   "compileOnSave": false
 }

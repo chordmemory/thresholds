@@ -1,12 +1,13 @@
+/* eslint-env node */
+/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-var nodeExternals = require('webpack-node-externals');
+const nodeExternals = require('webpack-node-externals');
 
 module.exports = {
   entry: path.join(__dirname, './main.ts'),
   mode: 'development',
   optimization: {
-      minimize: false
+    minimize: false
   },
   target: 'node',
   context: __dirname,
@@ -15,22 +16,20 @@ module.exports = {
       {
         test: /\.tsx?$/,
         use: 'ts-loader',
-        exclude: /node_modules/,
+        exclude: /node_modules/
       }
-    ],
+    ]
   },
   resolve: {
-    extensions: [ '.ts', '.js' ]
+    extensions: ['.ts', '.js']
   },
   output: {
     filename: 'chat-server.js',
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'dist')
   },
-  externals: [
-      nodeExternals()
-  ],
+  externals: [nodeExternals()],
   node: {
-      fs: "empty",
-      http: "empty"
+    fs: 'empty',
+    http: 'empty'
   }
 };

@@ -1,7 +1,7 @@
 import { Consumer } from "@threshold-types/core";
 
 const consumerMap: {
-  [name: string]: Consumer<unknown, unknown>
+  [name: string]: Consumer<unknown, unknown>;
 } = {};
 
 export const useConsumer = (consumerName: string, consumer: Consumer<unknown, unknown>) => {

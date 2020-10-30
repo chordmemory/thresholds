@@ -1,3 +1,5 @@
+/* eslint-env node */
+/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
@@ -10,21 +12,21 @@ module.exports = {
       {
         test: /\.tsx?$/,
         use: 'ts-loader',
-        exclude: /node_modules/,
+        exclude: /node_modules/
       }
-    ],
+    ]
   },
   plugins: [
-      new HtmlWebpackPlugin({
-          template: path.join(__dirname, 'index.html'),
-          inject: 'body'
-      })
+    new HtmlWebpackPlugin({
+      template: path.join(__dirname, 'index.html'),
+      inject: 'body'
+    })
   ],
   resolve: {
-    extensions: [ '.tsx', '.ts', '.js' ]
+    extensions: ['.tsx', '.ts', '.js']
   },
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'dist'),
-  }  
+    path: path.resolve(__dirname, 'dist')
+  }
 };

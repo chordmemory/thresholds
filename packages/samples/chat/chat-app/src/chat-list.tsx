@@ -1,21 +1,23 @@
 import * as React from 'react';
-import { ChatList } from "./chat-api";
+import { ChatList as iChatList } from './chat-api';
 
 interface Props {
-  chats: ChatList,
+  chats: iChatList;
   onChatOpened: (chatId: string) => void;
 }
 
-export default (props: Props) => {
-  const { chats, onChatOpened } = props;
+export const ChatList = (props: Props) => {
+  const { onChatOpened } = props;
   return (
-      <>
-        {props.chats.map((chat, index) => (
-          <div key={index}>
-            {chat.displayName}  
-            <button type="button" onClick={() => onChatOpened(chat.chatId)}>Open Chat</button>
-          </div>
-        ))}
-      </>
+    <>
+      {props.chats.map((chat, index) => (
+        <div key={index}>
+          {chat.displayName}
+          <button type="button" onClick={() => onChatOpened(chat.chatId)}>
+            Open Chat
+          </button>
+        </div>
+      ))}
+    </>
   );
-}
+};

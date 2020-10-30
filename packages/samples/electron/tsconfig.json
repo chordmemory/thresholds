@@ -1,4 +1,3 @@
-
 {
   "compilerOptions": {
     "moduleResolution": "node",
@@ -14,9 +13,5 @@
     "baseUrl": "./"
   },
   "compileOnSave": false,
-  "include": [
-    "./src",
-    "images.d.ts"
-  ],
-
+  "include": ["./src", "images.d.ts"]
 }

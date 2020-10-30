@@ -1,4 +1,3 @@
-
 {
   "compilerOptions": {
     "moduleResolution": "node",
@@ -17,8 +16,6 @@
     "experimentalDecorators": true,
     "plugins": []
   },
-  "include": [
-    "./src"
-  ],
+  "include": ["./src"],
   "compileOnSave": false
 }

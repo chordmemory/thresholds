@@ -1,6 +1,6 @@
 import { Chat, ChatManifest, Message } from './types';
 
-export type ChatList = { chatId: string, displayName: string, userIds: string[] }[]
+export type ChatList = { chatId: string; displayName: string; userIds: string[] }[]
 
 export interface ChatApi {
     getChats(): Promise<ChatList>;

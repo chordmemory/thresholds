@@ -6,13 +6,25 @@
     "packages/**"
   ],
   "dependencies": {
-    "lerna": "3.22.1",
+    "lerna": "^3.22.1",
     "typescript": "4.0.2",
     "wsrun": "5.2.1"
   },
   "scripts": {
-    "prebuild": "yarn workspaces foreach run prebuild",
-    "start": "yarn workspaces foreach -p -i -v -j 20 run start",
-    "build": "yarn workspaces foreach -pt -i -v run build"
+    "prebuild": "lerna run prebuild",
+    "start": "lerna run start",
+    "build": "lerna run build",
+    "validate:lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
+    "validate:prettier": "prettier --ignore-path .gitignore --write \"**/*.+(js|json)\"",
+    "validate": "concurrently \"npm:validate:*\""
+  },
+  "devDependencies": {
+    "@lerna/run": "^3.21.0",
+    "@typescript-eslint/eslint-plugin": "^2.0.0",
+    "@typescript-eslint/parser": "^2.0.0",
+    "eslint": "^7.12.1",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-react": "^7.21.5",
+    "prettier": "^2.1.2"
   }
 }
