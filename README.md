@@ -45,7 +45,7 @@ const HttpExposer = require('@thresholds/http-exposer');
 
 thresholds.useExposer('http', new HttpExposer(9080));
 
-await thresholds.exposeInstance(new ChatServer(new NoteService()));
+await thresholds.exposeInstance(new NoteService());
 ```
 And that's it, we are now exposing our chatserver over http. This is already pretty handy, but gets even more interesting in the client:
 
