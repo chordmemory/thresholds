@@ -1,4 +1,3 @@
-
 export interface PropertyDefinition<T> {
   name: string;
   transport: string;
@@ -10,8 +9,12 @@ export interface ConsumerManifest<T> {
 }
 
 export interface Consumer<tManifestOptions, tFuncOptions> {
-  getManifest(config: tManifestOptions): ConsumerManifest<tFuncOptions> | Promise<ConsumerManifest<tFuncOptions>>;
-  createFunction(config: PropertyDefinition<tFuncOptions>): Function | Promise<Function>;
+  getManifest(
+    config: tManifestOptions
+  ): ConsumerManifest<tFuncOptions> | Promise<ConsumerManifest<tFuncOptions>>;
+  createFunction(
+    config: PropertyDefinition<tFuncOptions>
+  ): Function | Promise<Function>;
 }
 
 export interface ExposedProperty<T> {
@@ -21,8 +24,8 @@ export interface ExposedProperty<T> {
   implementation: Function;
 }
 
-export interface Exposer<T> {
-  exposeProperty(threshold: ExposedProperty<T>): Promise<PropertyDefinition<unknown>>;
+export interface Exposer<T, V = undefined> {
+  exposeProperty(threshold: ExposedProperty<T>): Promise<PropertyDefinition<V>>;
 }
 
 export interface ThresholdServiceServerConfig {

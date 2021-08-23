@@ -7,7 +7,7 @@ import {
 import 'reflect-metadata';
 
 const exposerMap: {
-  [key: string]: Exposer<unknown>;
+  [key: string]: Exposer<unknown, unknown>;
 } = {};
 
 const exposeProperty = async (
@@ -17,7 +17,10 @@ const exposeProperty = async (
   return await exposer.exposeProperty(exposableProperty);
 };
 
-export const useExposer = (exposerName: string, exposer: Exposer<unknown>) => {
+export const useExposer = (
+  exposerName: string,
+  exposer: Exposer<unknown, unknown>
+) => {
   exposerMap[exposerName] = exposer;
 };
 

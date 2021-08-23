@@ -35,9 +35,7 @@ export class HttpExposer implements Exposer<HttpExposeOptions> {
   }
   private server: Promise<express.Application>;
 
-  public async exposeProperty(
-    config: ExposedProperty<HttpExposeOptions>
-  ): Promise<PropertyDefinition<HttpConsumeConfig>> {
+  public async exposeProperty(config: any): Promise<any> {
     const app = await this.server;
 
     const { route, paramMapper } = config.options;
@@ -65,10 +63,9 @@ export class HttpExposer implements Exposer<HttpExposeOptions> {
       },
       post: () => {
         app.post(route, async (req: express.Request, res: express.Response) => {
-          const args = (paramMapper || ((params, body) => body as unknown[]))(
-            req.params,
-            (req as any).body
-          );
+          const args = (
+            paramMapper || ((params: any, body: any) => body as unknown[])
+          )(req.params, (req as any).body);
           console.log('POST', config.name, args);
           try {
             const result = await config.implementation(...args);
