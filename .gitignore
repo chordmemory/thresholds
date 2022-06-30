@@ -8,3 +8,5 @@ dist
 !.yarn/versions
 .pnp.*
 yarn-error.log
+
+packages/apps

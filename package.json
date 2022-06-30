@@ -11,7 +11,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@fortawesome/react-fontawesome": "^0.1.14",
     "lerna": "^3.22.1",
-    "typescript": "4.0.2",
+    "typescript": "4.3.5",
     "wsrun": "5.2.1"
   },
   "scripts": {
