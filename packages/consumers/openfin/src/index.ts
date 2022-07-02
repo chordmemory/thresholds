@@ -1,6 +1,6 @@
 import {
   Consumer,
-  ConsumerManifest,
+  ThresholdConsumerSchema,
   PropertyDefinition
 } from '@threshold-types/core';
 import { v5 as uuid } from 'uuid';
@@ -37,12 +37,12 @@ export class OpenFinConsumer
     await this.iab.subscribe(identity, topic, handler);
   };
 
-  public async getManifest(config: OpenfinSchemaOptions) {
+  public async getSchema(config: OpenfinSchemaOptions) {
     const targetIdentity = {
       uuid: config.identity?.uuid || '*',
       name: config.identity?.name
     };
-    return new Promise<ConsumerManifest<OpenfinPropertyDefinition>>(
+    return new Promise<ThresholdConsumerSchema<OpenfinPropertyDefinition>>(
       async (resolve, reject) => {
         try {
           const correlationId = uuid(config.iabId, uuidNamespace);
@@ -72,7 +72,7 @@ export class OpenFinConsumer
       //   uuid: config.identity?.uuid || '*',
       //   name: config.identity?.name
       // };
-      return new Promise<ConsumerManifest<OpenfinPropertyDefinition>>(
+      return new Promise<ThresholdConsumerSchema<OpenfinPropertyDefinition>>(
         async (resolve, reject) => {
           try {
             const correlationId = uuid(config.options.iabId, uuidNamespace);

@@ -12,7 +12,9 @@ export class MyService {
 
   @expose()
   public asyncThing = async () => {
-    await new Promise((resolve) => setTimeout(() => resolve('delayed!'), 1000));
+    return await new Promise((resolve) =>
+      setTimeout(() => resolve('delayed!'), 1000)
+    );
   };
 
   @expose()
@@ -20,4 +22,18 @@ export class MyService {
 
   @expose()
   public getTopLevelVar = () => topLevelVar;
+
+  @expose()
+  public thrower = () => {
+    throw new Error('Ruh roh');
+  };
+
+  @expose()
+  public asyncThrower = async () => {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    throw new Error('Ruh roh');
+  };
+
+  @expose()
+  public rejectedPromise = () => Promise.reject(new Error('ruh roh'));
 }

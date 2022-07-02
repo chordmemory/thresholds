@@ -11,19 +11,6 @@ export type DecoratorProperty<T> = Omit<
 
 export const PROPERTIES_SYMBOL = Symbol();
 
-// export const threshold =
-//   <T>(transport: string, options?: T): ClassDecorator =>
-//   (target) => {
-//     Reflect.defineMetadata(
-//       'manifest',
-//       {
-//         transport,
-//         options
-//       },
-//       target.prototype
-//     );
-//   };
-
 export const expose = function <T>(
   transport?: string,
   name?: string,

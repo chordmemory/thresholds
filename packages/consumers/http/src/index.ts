@@ -1,12 +1,12 @@
 import { Consumer, PropertyDefinition } from '@threshold-types/core';
 
-export interface HttpPropertyConfig {
+export interface HttpPropertyOptions {
   url: string;
   method: string;
   headers?: HeadersInit;
 }
 
-export interface HttpManifestConfig {
+export interface HttpThresholdOptions {
   url: string;
 }
 
@@ -21,8 +21,9 @@ const tokenizeRoute = (uri: string, args: unknown[]) => {
 };
 
 export class HttpConsumer
-  implements Consumer<HttpManifestConfig, HttpPropertyConfig> {
-  public async getManifest(config: HttpManifestConfig) {
+  implements Consumer<HttpThresholdOptions, HttpPropertyOptions>
+{
+  public async getSchema(config: HttpThresholdOptions) {
     const response = await fetch(config.url, {
       method: 'get',
       headers: {
@@ -32,7 +33,7 @@ export class HttpConsumer
     return await response.json();
   }
 
-  public async createFunction(config: PropertyDefinition<HttpPropertyConfig>) {
+  public async createFunction(config: PropertyDefinition<HttpPropertyOptions>) {
     return async (...args: unknown[]) => {
       const { url, method, headers } = config.options;
       if (method.toLowerCase() === 'get') {

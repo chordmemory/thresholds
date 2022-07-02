@@ -11,18 +11,18 @@ export const useConsumer = (
   consumerMap[consumerName] = consumer;
 };
 
-export const consume = async <tResult, tManifestOptions>(
+export const consume = async <tResult, tSchemaOptions>(
   consumerId: string,
-  options: tManifestOptions
+  options: tSchemaOptions
 ) => {
   const consumer = consumerMap[consumerId];
   if (!consumer) {
     throw new Error(`No consumer configured with name ${consumerId}`);
   }
-  const manifest = await consumer.getManifest(options);
-  console.info(`thresolds:consume:manifest:${consumerId}:`, manifest);
+  const thresholdSchema = await consumer.getSchema(options);
+  console.info(`thresolds:consume:schema:${consumerId}:`, thresholdSchema);
   const thresholdFns = await Promise.all(
-    manifest.properties.map(async (func) => {
+    thresholdSchema.properties.map(async (func) => {
       return {
         name: func.name,
         fn: await consumer.createFunction(func)

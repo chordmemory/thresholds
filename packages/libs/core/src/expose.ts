@@ -1,5 +1,5 @@
 import {
-  ConsumerManifest,
+  ThresholdConsumerSchema,
   Exposer,
   ExposedProperty,
   PropertyDefinition,
@@ -52,7 +52,7 @@ export const exposeInstance = async (
       })
     )
   );
-  const thresholdSchema: ConsumerManifest<unknown> = {
+  const thresholdSchema: ThresholdConsumerSchema<unknown> = {
     properties: propertyDefinitions
   };
   await exposeProperty({

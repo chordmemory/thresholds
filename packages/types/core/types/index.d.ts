@@ -10,14 +10,16 @@ export interface PropertySchema<T> {
   options: T;
 }
 
-export interface ConsumerManifest<T> {
+export interface ThresholdConsumerSchema<T> {
   properties: PropertyDefinition<T>[];
 }
 
-export interface Consumer<tManifestOptions, tFuncOptions> {
-  getManifest(
-    config: tManifestOptions
-  ): ConsumerManifest<tFuncOptions> | Promise<ConsumerManifest<tFuncOptions>>;
+export interface Consumer<tSchemaOptions, tFuncOptions> {
+  getSchema(
+    config: tSchemaOptions
+  ):
+    | ThresholdConsumerSchema<tFuncOptions>
+    | Promise<ThresholdConsumerSchema<tFuncOptions>>;
   createFunction(
     config: PropertyDefinition<tFuncOptions>
   ): Function | Promise<Function>;
@@ -37,9 +39,4 @@ export interface Exposer<
   exposeProperty(
     property: ExposedProperty<PropertyExposeOptions>
   ): Promise<PropertySchema<PropertySchemaOptions>>;
-}
-
-export interface ThresholdServiceServerConfig {
-  manifest: Omit<ExposedProperty<unknown>, 'implementation'>;
-  thresholds: ExposedProperty<unknown>[];
 }
