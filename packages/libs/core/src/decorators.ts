@@ -1,39 +1,44 @@
 import { ExposedProperty } from '@threshold-types/core';
-import 'reflect-metadata';
 
-export const threshold = <T>(
-  transport: string,
-  options?: T
-): ClassDecorator => (target) => {
-  Reflect.defineMetadata(
-    'manifest',
-    {
-      transport,
-      options
-    },
-    target.prototype
-  );
+export type DecoratorProperty<T> = Omit<
+  ExposedProperty<T>,
+  'transport' | 'implementation'
+> & {
+  // Transport is optional in decorator, as it defaults to whatever exposer you use to expose the schema of a threshold.
+  transport?: string;
+  propertykey: string | symbol;
 };
 
-export const expose = <T>(transport: string, options?: T): MethodDecorator => (
-  target,
-  name,
-  descriptor
-) => {
-  if (typeof descriptor.value === 'function') {
-    const thresholdMetadata =
-      Reflect.getMetadata('exposed-properties', target) || [];
-    const threshold: ExposedProperty<T | undefined> = {
-      name: name.toString(),
-      implementation: descriptor.value,
+export const PROPERTIES_SYMBOL = Symbol();
+
+// export const threshold =
+//   <T>(transport: string, options?: T): ClassDecorator =>
+//   (target) => {
+//     Reflect.defineMetadata(
+//       'manifest',
+//       {
+//         transport,
+//         options
+//       },
+//       target.prototype
+//     );
+//   };
+
+export const expose = function <T>(
+  transport?: string,
+  name?: string,
+  options?: T
+): PropertyDecorator {
+  return function (target: any, key: string | symbol): void {
+    const exposedProperties = (target[PROPERTIES_SYMBOL] =
+      target[PROPERTIES_SYMBOL] || []);
+
+    const threshold: DecoratorProperty<T | undefined> = {
+      name: name || key.toString(),
+      propertykey: key,
       options,
       transport
     };
-    Reflect.defineMetadata(
-      'exposed-properties',
-      [...thresholdMetadata, threshold],
-      target
-    );
-  }
-  return descriptor;
+    target[PROPERTIES_SYMBOL] = [...exposedProperties, threshold];
+  };
 };

@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "module": "esnext",
+    "target": "ES6",
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "stripInternal": true,
+    "resolveJsonModule": true,
+    "jsx": "react",
+    "baseUrl": "./",
+    "charset": "",
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "compileOnSave": false,
+  "include": ["./src", "./assets", "images.d.ts", "./styled.d.ts"]
+}

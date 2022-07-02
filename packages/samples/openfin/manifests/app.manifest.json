@@ -1,0 +1,10 @@
+{
+  "startup_app": {
+    "url": "http://localhost:9000/app",
+    "autoShow": true,
+    "uuid": "app"
+  },
+  "runtime": {
+    "version": "beta"
+  }
+}

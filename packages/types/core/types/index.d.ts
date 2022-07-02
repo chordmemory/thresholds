@@ -4,6 +4,12 @@ export interface PropertyDefinition<T> {
   options: T;
 }
 
+export interface PropertySchema<T> {
+  name: string;
+  transport: string;
+  options: T;
+}
+
 export interface ConsumerManifest<T> {
   properties: PropertyDefinition<T>[];
 }
@@ -24,8 +30,13 @@ export interface ExposedProperty<T> {
   implementation: Function;
 }
 
-export interface Exposer<T, V = undefined> {
-  exposeProperty(threshold: ExposedProperty<T>): Promise<PropertyDefinition<V>>;
+export interface Exposer<
+  PropertyExposeOptions = unknown,
+  PropertySchemaOptions = unknown
+> {
+  exposeProperty(
+    property: ExposedProperty<PropertyExposeOptions>
+  ): Promise<PropertySchema<PropertySchemaOptions>>;
 }
 
 export interface ThresholdServiceServerConfig {

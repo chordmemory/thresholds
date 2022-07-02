@@ -2,9 +2,11 @@ import {
   ConsumerManifest,
   Exposer,
   ExposedProperty,
-  PropertyDefinition
+  PropertyDefinition,
+  PropertySchema
 } from '@threshold-types/core';
 import 'reflect-metadata';
+import { DecoratorProperty, PROPERTIES_SYMBOL } from './decorators';
 
 const exposerMap: {
   [key: string]: Exposer<unknown, unknown>;
@@ -12,9 +14,14 @@ const exposerMap: {
 
 const exposeProperty = async (
   exposableProperty: ExposedProperty<unknown>
-): Promise<PropertyDefinition<unknown>> => {
+): Promise<PropertySchema<unknown>> => {
   const exposer = exposerMap[exposableProperty.transport];
-  return await exposer.exposeProperty(exposableProperty);
+  const property = await exposer.exposeProperty(exposableProperty);
+  console.info(
+    `threshold:exposer:${exposableProperty.transport}: Exposed property`,
+    property
+  );
+  return property;
 };
 
 export const useExposer = (
@@ -24,31 +31,38 @@ export const useExposer = (
   exposerMap[exposerName] = exposer;
 };
 
-export const exposeInstance = async (instance: Record<string, any>) => {
-  const manifest = Reflect.getMetadata('manifest', instance);
-  if (!manifest) {
-    throw new Error('Manifest not defined for instance');
-  }
-  const exposedProperties: ExposedProperty<unknown>[] =
-    Reflect.getMetadata('exposed-properties', instance) || [];
-  if (!exposedProperties.length) {
+export const exposeInstance = async (
+  instance: Record<string | symbol, any>,
+  schemaExposerTransport: string,
+  schemaExposerName?: string,
+  schemaExposerOptions?: unknown
+) => {
+  const exposedProperties: DecoratorProperty<unknown>[] =
+    instance[PROPERTIES_SYMBOL];
+
+  if (!exposedProperties?.length) {
     throw new Error('Instance does not have any exposed properties');
   }
   const propertyDefinitions = await Promise.all(
     exposedProperties.map((exposedProperty) =>
       exposeProperty({
         ...exposedProperty,
-        implementation: exposedProperty.implementation.bind(instance)
+        implementation: instance[exposedProperty.propertykey].bind(instance),
+        transport: exposedProperty.transport || schemaExposerTransport
       })
     )
   );
-  const consumerManifest: ConsumerManifest<unknown> = {
+  const thresholdSchema: ConsumerManifest<unknown> = {
     properties: propertyDefinitions
   };
   await exposeProperty({
-    name: 'manifest',
-    options: manifest.options,
-    transport: manifest.transport,
-    implementation: () => consumerManifest
+    name: schemaExposerName || 'schema',
+    options: schemaExposerOptions,
+    transport: schemaExposerTransport,
+    implementation: () => thresholdSchema
   });
+  console.info(
+    `thresholds:expose:${schemaExposerTransport}: Exposed schema`,
+    thresholdSchema
+  );
 };
