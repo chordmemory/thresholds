@@ -17,7 +17,7 @@ Normally, you would either manually write or generate explicit code to do so.
 However, to speed things up a bit, we can use our fancy decorators to take care of the boring stuff.
 
 ```js
-import { threshold, expose } from '@thresholds/core';
+import { expose } from '@thresholds/core';
 
 class NoteService {
   constructor() {
@@ -39,12 +39,12 @@ class NoteService {
 We can then start the service up with a simple call:
 
 ```js
-const thresholds = require('@thresholds/core');
-const HttpExposer = require('@thresholds/http-exposer');
+import { useExposer, exposeInstance from '@thresholds/core';
+import { HttpExposer } from '@thresholds/http-exposer';
 
-thresholds.useExposer('http', new HttpExposer(9080));
+useExposer('http', new HttpExposer(9080));
 
-await thresholds.exposeInstance(new NoteService(), {
+await exposeInstance(new NoteService(), {
   route: '/schema',
   method: 'get'
 });
@@ -53,7 +53,7 @@ await thresholds.exposeInstance(new NoteService(), {
 And that's it, we are now exposing our chatserver over http. This is already pretty handy, but things get even easier in the client:
 
 ```ts
-import * as thresholds from '@thresholds/core';
+import { useConsumer, consume } from '@thresholds/core';
 import { HttpConsumer } from '@thresholds/http-consumer';
 
 thresholds.useConsumer('http', new HttpConsumer());
